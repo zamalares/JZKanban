@@ -651,7 +651,7 @@
     "deadline": "",
     "priority": 2,
     "status": "progress",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
@@ -676,6 +676,6 @@
     ],
     "subKanban": [],
     "linkUrl": "",
-    "color": "rose"
+    "color": "blue"
   }
 ]
