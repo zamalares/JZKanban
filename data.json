@@ -550,7 +550,7 @@
         "deadline": "",
         "priority": 3,
         "status": "todo",
-        "collapsed": false,
+        "collapsed": true,
         "subtasks": [
           {
             "id": 0,
