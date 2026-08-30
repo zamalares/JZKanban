@@ -918,5 +918,46 @@
         "subKanban": []
       }
     ]
+  },
+  {
+    "id": 1788095786043,
+    "title": "FALLING OF THE RAIN",
+    "notes": "",
+    "linkUrl": "",
+    "client": "KRZYSZTOF PIOTRÓW",
+    "contact": "",
+    "deadline": "",
+    "priority": 2,
+    "color": "amber",
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Produkcja",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Nagrania",
+        "done": false
+      },
+      {
+        "id": 2,
+        "text": "Miks/Mastering",
+        "done": false
+      },
+      {
+        "id": 3,
+        "text": "Teledysk - nagranie",
+        "done": false
+      },
+      {
+        "id": 4,
+        "text": "Teledysk Montaż",
+        "done": false
+      }
+    ],
+    "subKanban": []
   }
 ]
