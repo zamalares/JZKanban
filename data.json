@@ -115,7 +115,23 @@
       }
     ],
     "linkUrl": "",
-    "color": "rose"
+    "color": "rose",
+    "subKanban": [
+      {
+        "id": 1788094609050,
+        "title": "ROZLICZYĆ ZALEGŁOŚCI",
+        "linkUrl": "",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "color": "rose",
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [],
+        "subKanban": []
+      }
+    ]
   },
   {
     "id": 1788093445441,
