@@ -133,6 +133,18 @@
         "collapsed": true,
         "subtasks": [],
         "subKanban": []
+      },
+      {
+        "id": 1788093737450,
+        "title": "Posłanie",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [],
+        "subKanban": []
       }
     ]
   }
