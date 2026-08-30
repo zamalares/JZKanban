@@ -929,7 +929,7 @@
     "deadline": "",
     "priority": 2,
     "color": "amber",
-    "status": "todo",
+    "status": "progress",
     "collapsed": false,
     "subtasks": [
       {
