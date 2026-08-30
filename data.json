@@ -793,7 +793,7 @@
         "priority": 2,
         "color": "default",
         "status": "progress",
-        "collapsed": false,
+        "collapsed": true,
         "subtasks": [],
         "subKanban": []
       }
