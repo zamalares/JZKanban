@@ -737,5 +737,20 @@
       }
     ],
     "subKanban": []
+  },
+  {
+    "id": 1788095394185,
+    "title": "PŁYTA MARCIN OBŁOZA MIXY",
+    "notes": "",
+    "linkUrl": "",
+    "client": "Marcin Obłoza",
+    "contact": "",
+    "deadline": "",
+    "priority": 2,
+    "color": "slate",
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [],
+    "subKanban": []
   }
 ]
