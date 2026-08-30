@@ -310,6 +310,39 @@
           }
         ],
         "subKanban": []
+      },
+      {
+        "id": 1788093876755,
+        "title": "Zamyślenie w obcym mieście",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 3,
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [
+          {
+            "id": 0,
+            "text": "Aranżacja",
+            "done": false
+          },
+          {
+            "id": 1,
+            "text": "Nagranie instrumentów",
+            "done": false
+          },
+          {
+            "id": 2,
+            "text": "Nagranie wokalu i gitary",
+            "done": false
+          },
+          {
+            "id": 3,
+            "text": "Mix/Master",
+            "done": false
+          }
+        ],
+        "subKanban": []
       }
     ]
   }
