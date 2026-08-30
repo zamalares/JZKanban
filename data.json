@@ -142,7 +142,7 @@
         "deadline": "",
         "priority": 2,
         "status": "done",
-        "collapsed": false,
+        "collapsed": true,
         "subtasks": [],
         "subKanban": []
       }
