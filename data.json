@@ -749,7 +749,7 @@
     "priority": 2,
     "color": "slate",
     "status": "todo",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [],
     "subKanban": [
       {
