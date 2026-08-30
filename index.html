@@ -69,7 +69,6 @@
 
   .task-list { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
 
-  /* Stylizacja Kart */
   .card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
     padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;
@@ -96,7 +95,20 @@
   .card-meta { display: flex; gap: 8px; font-size: 0.75rem; align-items: center; }
   .deadline { color: var(--text-muted); }
 
-  /* Przycisk Linku Dropbox */
+  /* Boks Notatek */
+  .card-notes {
+    background: rgba(0, 0, 0, 0.25);
+    border-left: 3px solid var(--accent);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.35;
+  }
+
+  /* Przycisk Linku */
   .dropbox-link {
     display: flex; align-items: center; gap: 6px;
     background: rgba(74, 114, 255, 0.1); border: 1px solid rgba(74, 114, 255, 0.3);
@@ -152,7 +164,7 @@
   .modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
   .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 8px 14px; border-radius: 6px; cursor: pointer; }
 
-  /* Paleta Kolorów Pastelowych */
+  /* Paleta Pastelowa */
   .color-picker { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
   .color-option {
     width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
@@ -160,7 +172,6 @@
   }
   .color-option:hover { transform: scale(1.15); }
   .color-option.selected { border-color: #ffffff; transform: scale(1.15); }
-
 </style>
 </head>
 <body>
@@ -202,7 +213,6 @@
   </div>
 </div>
 
-<!-- Modal Dodawania / Edycji Karty -->
 <div class="modal-overlay" id="projectModal">
   <div class="modal">
     <h2 id="modalTitle">Dodaj nową kartę</h2>
@@ -220,7 +230,12 @@
     </div>
 
     <div class="form-group">
-      <label>Link do plików (Dropbox / Google Drive / Cloud)</label>
+      <label>Notatki / Uwagi (rozliczenia, wytyczne itp.)</label>
+      <textarea id="projectNotes" rows="3" placeholder="np. Zaliczka 50% wpłacona. Poprawki do miksu po stronie wokalistki..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Link do plików (Dropbox / Cloud)</label>
       <input type="url" id="linkUrl" placeholder="https://www.dropbox.com/sh/...">
     </div>
 
@@ -260,7 +275,6 @@
   </div>
 </div>
 
-<!-- Modal Ustawień GitHuba -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <h2>Ustawienia GitHub API</h2>
@@ -284,7 +298,6 @@
 </div>
 
 <script>
-  // Paleta stonowanych, czytelnych kolorów pastelowych w trybie ciemnym
   const PASTEL_COLORS = [
     { id: 'default', bg: '#1e222b', border: '#2d3342', name: 'Domyślny' },
     { id: 'blue',    bg: '#1b263b', border: '#415a77', name: 'Błękit' },
@@ -346,6 +359,7 @@
       modalTitle.textContent = "Edytuj kartę";
       editIdInput.value = proj.id;
       document.getElementById('trackTitle').value = proj.title;
+      document.getElementById('projectNotes').value = proj.notes || '';
       document.getElementById('linkUrl').value = proj.linkUrl || '';
       document.getElementById('clientName').value = proj.client || '';
       document.getElementById('clientContact').value = proj.contact || '';
@@ -358,6 +372,7 @@
       modalTitle.textContent = currentParentId ? "Dodaj utwór / zadanie podrzędne" : "Dodaj nową kartę projektu";
       editIdInput.value = "";
       document.getElementById('trackTitle').value = '';
+      document.getElementById('projectNotes').value = '';
       document.getElementById('linkUrl').value = '';
       document.getElementById('clientName').value = '';
       document.getElementById('clientContact').value = '';
@@ -479,6 +494,7 @@
     if (!title) return alert('Wpisz tytuł!');
 
     const editId = document.getElementById('editProjectId').value;
+    const notes = document.getElementById('projectNotes').value.trim();
     const linkUrl = document.getElementById('linkUrl').value.trim();
     const client = document.getElementById('clientName').value.trim();
     const contact = document.getElementById('clientContact').value.trim();
@@ -493,6 +509,7 @@
       const proj = activeList.find(p => p.id === parseInt(editId));
       if (proj) {
         proj.title = title;
+        proj.notes = notes;
         proj.linkUrl = linkUrl;
         proj.client = client;
         proj.contact = contact;
@@ -515,6 +532,7 @@
       const newProject = {
         id: Date.now(),
         title,
+        notes,
         linkUrl,
         client,
         contact,
@@ -647,6 +665,11 @@
           `;
         }
 
+        let notesHtml = '';
+        if (p.notes) {
+          notesHtml = `<div class="card-notes">📝 ${p.notes}</div>`;
+        }
+
         let subKanbanBtnHtml = '';
         if (currentParentId === null) {
           const countDone = (p.subKanban || []).filter(item => item.status === 'done').length;
@@ -676,6 +699,7 @@
 
           <div class="card-body">
             ${p.deadline ? `<div class="card-meta"><span class="deadline">📅 ${p.deadline}</span></div>` : ''}
+            ${notesHtml}
             ${linkHtml}
             ${subKanbanBtnHtml}
             ${(p.subtasks && p.subtasks.length) ? `<div class="subtasks">${subtasksHtml}</div>` : ''}
