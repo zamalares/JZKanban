@@ -20,7 +20,7 @@
     "client": "Piotr",
     "deadline": "",
     "priority": 2,
-    "status": "todo",
+    "status": "progress",
     "subtasks": [
       {
         "id": 0,
