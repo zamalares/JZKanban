@@ -706,5 +706,50 @@
     "subKanban": [],
     "linkUrl": "",
     "color": "blue"
+  },
+  {
+    "id": 1788094744600,
+    "title": "PIOSENKA APRILOFONIA",
+    "linkUrl": "",
+    "client": "Martyna Kwaśnik",
+    "contact": "",
+    "deadline": "2026-12-31",
+    "priority": 2,
+    "color": "teal",
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Napisanie Tekstu",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Ułożenie Melodii",
+        "done": false
+      },
+      {
+        "id": 2,
+        "text": "Kompozycja",
+        "done": false
+      },
+      {
+        "id": 3,
+        "text": "Nagranie Partii",
+        "done": false
+      },
+      {
+        "id": 4,
+        "text": "Nagranie wokali",
+        "done": false
+      },
+      {
+        "id": 5,
+        "text": "Mix/Master",
+        "done": false
+      }
+    ],
+    "subKanban": []
   }
 ]
