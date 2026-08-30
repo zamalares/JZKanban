@@ -119,7 +119,8 @@
     "deadline": "",
     "priority": 2,
     "status": "todo",
-    "collapsed": false,
-    "subtasks": []
+    "collapsed": true,
+    "subtasks": [],
+    "subKanban": []
   }
 ]
