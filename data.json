@@ -121,6 +121,19 @@
     "status": "todo",
     "collapsed": false,
     "subtasks": [],
-    "subKanban": []
+    "subKanban": [
+      {
+        "id": 1788093710474,
+        "title": "Nie licz wśród burzy",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [],
+        "subKanban": []
+      }
+    ]
   }
 ]
