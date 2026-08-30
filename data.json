@@ -609,5 +609,38 @@
         "subKanban": []
       }
     ]
+  },
+  {
+    "id": 1788094193629,
+    "title": "Siebie mi brakuje",
+    "client": "Aleksandra Urbanek",
+    "contact": "",
+    "deadline": "",
+    "priority": 2,
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Aranżacja",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Nagranie instrumentów",
+        "done": false
+      },
+      {
+        "id": 2,
+        "text": "Nagranie wokalu",
+        "done": false
+      },
+      {
+        "id": 3,
+        "text": "Mix/Master",
+        "done": false
+      }
+    ],
+    "subKanban": []
   }
 ]
