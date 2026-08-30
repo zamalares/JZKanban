@@ -77,5 +77,37 @@
         "done": false
       }
     ]
+  },
+  {
+    "id": 1788093376843,
+    "title": "PIOSENKA",
+    "client": "Dawid Strużyński",
+    "contact": "",
+    "deadline": "",
+    "priority": 2,
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Aranżacja",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Nagranie Instrumentów",
+        "done": false
+      },
+      {
+        "id": 2,
+        "text": "Nagranie Wokali",
+        "done": false
+      },
+      {
+        "id": 3,
+        "text": "Mix/Master",
+        "done": false
+      }
+    ]
   }
 ]
