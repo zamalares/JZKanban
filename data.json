@@ -45,5 +45,37 @@
       }
     ],
     "collapsed": true
+  },
+  {
+    "id": 1788093304939,
+    "title": "Lillies of the Valley",
+    "client": "Damian Rozenko",
+    "contact": "",
+    "deadline": "",
+    "priority": 2,
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Aranżacja",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Nagranie Partii",
+        "done": false
+      },
+      {
+        "id": 2,
+        "text": "Nagranie wokalu",
+        "done": false
+      },
+      {
+        "id": 3,
+        "text": "Mix/Master",
+        "done": false
+      }
+    ]
   }
 ]
