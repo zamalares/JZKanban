@@ -69,14 +69,12 @@
 
   .task-list { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
 
+  /* Stylizacja Kart */
   .card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
     padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;
     transition: all 0.2s ease;
   }
-  .card.prio-high { border-left: 4px solid var(--prio-high); }
-  .card.prio-med { border-left: 4px solid var(--prio-med); }
-  .card.prio-low { border-left: 4px solid var(--prio-low); }
 
   .card-top { display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer; user-select: none; }
   .card-top-left { display: flex; flex-direction: column; gap: 2px; }
@@ -98,18 +96,20 @@
   .card-meta { display: flex; gap: 8px; font-size: 0.75rem; align-items: center; }
   .deadline { color: var(--text-muted); }
 
+  /* Przycisk Linku Dropbox */
+  .dropbox-link {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(74, 114, 255, 0.1); border: 1px solid rgba(74, 114, 255, 0.3);
+    color: #668cff; padding: 6px 10px; border-radius: 6px; font-size: 0.8rem;
+    text-decoration: none; font-weight: 600; transition: background 0.2s;
+  }
+  .dropbox-link:hover { background: rgba(74, 114, 255, 0.25); }
+
+  /* Sub-Kanban Trigger */
   .subkanban-trigger {
-    background: rgba(151, 117, 250, 0.1);
-    border: 1px solid rgba(151, 117, 250, 0.3);
-    color: var(--purple);
-    padding: 8px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background: rgba(151, 117, 250, 0.1); border: 1px solid rgba(151, 117, 250, 0.3);
+    color: var(--purple); padding: 8px 10px; border-radius: 6px; font-size: 0.8rem;
+    font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
     transition: background 0.2s;
   }
   .subkanban-trigger:hover { background: rgba(151, 117, 250, 0.2); }
@@ -132,6 +132,7 @@
   .btn-edit { color: var(--accent); }
   .btn-delete { color: var(--danger); }
 
+  /* Modale */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
     display: none; justify-content: center; align-items: center; padding: 16px; z-index: 100;
@@ -140,6 +141,7 @@
   .modal {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
     padding: 24px; width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 14px;
+    max-height: 90vh; overflow-y: auto;
   }
   .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group label { font-size: 0.8rem; color: var(--text-muted); }
@@ -149,6 +151,16 @@
   }
   .modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
   .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+
+  /* Paleta Kolorów Pastelowych */
+  .color-picker { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .color-option {
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+    border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s;
+  }
+  .color-option:hover { transform: scale(1.15); }
+  .color-option.selected { border-color: #ffffff; transform: scale(1.15); }
+
 </style>
 </head>
 <body>
@@ -190,26 +202,43 @@
   </div>
 </div>
 
+<!-- Modal Dodawania / Edycji Karty -->
 <div class="modal-overlay" id="projectModal">
   <div class="modal">
     <h2 id="modalTitle">Dodaj nową kartę</h2>
     <input type="hidden" id="editProjectId">
+    
     <div class="form-group">
       <label>Nazwa projektu / Tytuł utworu</label>
       <input type="text" id="trackTitle" placeholder="np. Płyta Andrzeja / Utwór 01" required>
     </div>
+
+    <div class="form-group">
+      <label>Kolor karty (Pastelowy)</label>
+      <div class="color-picker" id="colorPickerContainer"></div>
+      <input type="hidden" id="selectedColor" value="default">
+    </div>
+
+    <div class="form-group">
+      <label>Link do plików (Dropbox / Google Drive / Cloud)</label>
+      <input type="url" id="linkUrl" placeholder="https://www.dropbox.com/sh/...">
+    </div>
+
     <div class="form-group">
       <label>Klient / Wykonawca</label>
       <input type="text" id="clientName" placeholder="np. Andrzej Kowalski">
     </div>
+    
     <div class="form-group">
       <label>Kontakt / E-mail</label>
       <input type="text" id="clientContact" placeholder="np. kontakt@klient.pl lub tel.">
     </div>
+
     <div class="form-group">
       <label>Deadline</label>
       <input type="date" id="deadline">
     </div>
+
     <div class="form-group">
       <label>Priorytet</label>
       <select id="priority">
@@ -218,10 +247,12 @@
         <option value="1">Niski</option>
       </select>
     </div>
+
     <div class="form-group">
       <label>Etapy / Checklist (każdy etap w nowej linii)</label>
       <textarea id="subtasks" rows="3" placeholder="Kompozycja&#10;Aranżacja&#10;Miks&#10;Mastering"></textarea>
     </div>
+
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeProjectModal()">Anuluj</button>
       <button class="btn-primary" onclick="saveProject()">Zapisz</button>
@@ -229,6 +260,7 @@
   </div>
 </div>
 
+<!-- Modal Ustawień GitHuba -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <h2>Ustawienia GitHub API</h2>
@@ -252,8 +284,20 @@
 </div>
 
 <script>
+  // Paleta stonowanych, czytelnych kolorów pastelowych w trybie ciemnym
+  const PASTEL_COLORS = [
+    { id: 'default', bg: '#1e222b', border: '#2d3342', name: 'Domyślny' },
+    { id: 'blue',    bg: '#1b263b', border: '#415a77', name: 'Błękit' },
+    { id: 'green',   bg: '#1b3225', border: '#2e5a44', name: 'Szałwia' },
+    { id: 'purple',  bg: '#2a1b3d', border: '#442b63', name: 'Fiolet' },
+    { id: 'amber',   bg: '#332415', border: '#5c4028', name: 'Bursztyn' },
+    { id: 'rose',    bg: '#331b26', border: '#5c2d43', name: 'Róż' },
+    { id: 'teal',    bg: '#162e2e', border: '#295252', name: 'Morski' },
+    { id: 'slate',   bg: '#252a34', border: '#3b4252', name: 'Szary' }
+  ];
+
   let rootProjects = [];
-  let currentParentId = null; // null = widok główny, ID = podgląd sub-kanbana
+  let currentParentId = null;
   let fileSha = null;
 
   let ghConfig = JSON.parse(localStorage.getItem('gh_kanban_config')) || {
@@ -273,6 +317,24 @@
     return parent.subKanban;
   }
 
+  function renderColorPicker(selectedId = 'default') {
+    const container = document.getElementById('colorPickerContainer');
+    container.innerHTML = '';
+    PASTEL_COLORS.forEach(c => {
+      const opt = document.createElement('div');
+      opt.className = `color-option ${c.id === selectedId ? 'selected' : ''}`;
+      opt.style.backgroundColor = c.bg;
+      opt.style.borderColor = c.id === selectedId ? '#ffffff' : c.border;
+      opt.title = c.name;
+      opt.onclick = () => {
+        document.getElementById('selectedColor').value = c.id;
+        document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+        opt.classList.add('selected');
+      };
+      container.appendChild(opt);
+    });
+  }
+
   function openProjectModal(editId = null) {
     const modalTitle = document.getElementById('modalTitle');
     const editIdInput = document.getElementById('editProjectId');
@@ -284,20 +346,26 @@
       modalTitle.textContent = "Edytuj kartę";
       editIdInput.value = proj.id;
       document.getElementById('trackTitle').value = proj.title;
+      document.getElementById('linkUrl').value = proj.linkUrl || '';
       document.getElementById('clientName').value = proj.client || '';
       document.getElementById('clientContact').value = proj.contact || '';
       document.getElementById('deadline').value = proj.deadline || '';
       document.getElementById('priority').value = proj.priority || '2';
+      document.getElementById('selectedColor').value = proj.color || 'default';
       document.getElementById('subtasks').value = (proj.subtasks || []).map(s => s.text).join('\n');
+      renderColorPicker(proj.color || 'default');
     } else {
       modalTitle.textContent = currentParentId ? "Dodaj utwór / zadanie podrzędne" : "Dodaj nową kartę projektu";
       editIdInput.value = "";
       document.getElementById('trackTitle').value = '';
+      document.getElementById('linkUrl').value = '';
       document.getElementById('clientName').value = '';
       document.getElementById('clientContact').value = '';
       document.getElementById('deadline').value = '';
       document.getElementById('subtasks').value = '';
       document.getElementById('priority').value = '2';
+      document.getElementById('selectedColor').value = 'default';
+      renderColorPicker('default');
     }
 
     document.getElementById('projectModal').classList.add('active');
@@ -411,10 +479,12 @@
     if (!title) return alert('Wpisz tytuł!');
 
     const editId = document.getElementById('editProjectId').value;
+    const linkUrl = document.getElementById('linkUrl').value.trim();
     const client = document.getElementById('clientName').value.trim();
     const contact = document.getElementById('clientContact').value.trim();
     const deadline = document.getElementById('deadline').value;
     const priority = parseInt(document.getElementById('priority').value);
+    const color = document.getElementById('selectedColor').value;
     const rawSubtasks = document.getElementById('subtasks').value.split('\n');
 
     const activeList = getActiveArray();
@@ -423,10 +493,12 @@
       const proj = activeList.find(p => p.id === parseInt(editId));
       if (proj) {
         proj.title = title;
+        proj.linkUrl = linkUrl;
         proj.client = client;
         proj.contact = contact;
         proj.deadline = deadline;
         proj.priority = priority;
+        proj.color = color;
         
         const oldMap = new Map((proj.subtasks || []).map(s => [s.text, s.done]));
         proj.subtasks = rawSubtasks
@@ -443,10 +515,12 @@
       const newProject = {
         id: Date.now(),
         title,
+        linkUrl,
         client,
         contact,
         deadline,
         priority,
+        color,
         status: 'todo',
         collapsed: false,
         subtasks,
@@ -507,9 +581,9 @@
   }
 
   function getPriorityMeta(prio) {
-    if (prio === 3) return { class: 'prio-high', badgeClass: 'badge-high', label: 'Wysoki' };
-    if (prio === 2) return { class: 'prio-med', badgeClass: 'badge-med', label: 'Średni' };
-    return { class: 'prio-low', badgeClass: 'badge-low', label: 'Niski' };
+    if (prio === 3) return { badgeClass: 'badge-high', label: 'Wysoki' };
+    if (prio === 2) return { badgeClass: 'badge-med', label: 'Średni' };
+    return { badgeClass: 'badge-low', label: 'Niski' };
   }
 
   function renderBoard() {
@@ -543,8 +617,12 @@
       filtered.forEach(p => {
         const prioInfo = getPriorityMeta(p.priority);
         const isCollapsed = p.collapsed ? 'collapsed' : '';
+        const colorConfig = PASTEL_COLORS.find(c => c.id === (p.color || 'default')) || PASTEL_COLORS[0];
+
         const card = document.createElement('div');
-        card.className = `card ${prioInfo.class} ${isCollapsed}`;
+        card.className = `card ${isCollapsed}`;
+        card.style.backgroundColor = colorConfig.bg;
+        card.style.borderColor = colorConfig.border;
 
         let subtasksHtml = (p.subtasks || []).map(s => `
           <label class="subtask-item ${s.done ? 'done' : ''}">
@@ -560,7 +638,15 @@
           contactHtml = `<a class="card-contact" href="${href}" onclick="event.stopPropagation()">✉️ ${p.contact}</a>`;
         }
 
-        // Sub-kanban button widoczny tylko na poziomie głównym
+        let linkHtml = '';
+        if (p.linkUrl) {
+          linkHtml = `
+            <a href="${p.linkUrl}" target="_blank" rel="noopener" class="dropbox-link" onclick="event.stopPropagation()">
+              <span>🔗 Otwórz Dropbox / Pliki</span>
+            </a>
+          `;
+        }
+
         let subKanbanBtnHtml = '';
         if (currentParentId === null) {
           const countDone = (p.subKanban || []).filter(item => item.status === 'done').length;
@@ -569,7 +655,7 @@
           
           subKanbanBtnHtml = `
             <div class="subkanban-trigger" onclick="event.stopPropagation(); openSubKanban(${p.id})">
-              <span>🗂️ Otwórz Sub-Kanban (utwory/podprojekty)</span>
+              <span>🗂️ Otwórz Sub-Kanban (utwory)</span>
               <span>${labelCount} ➔</span>
             </div>
           `;
@@ -590,6 +676,7 @@
 
           <div class="card-body">
             ${p.deadline ? `<div class="card-meta"><span class="deadline">📅 ${p.deadline}</span></div>` : ''}
+            ${linkHtml}
             ${subKanbanBtnHtml}
             ${(p.subtasks && p.subtasks.length) ? `<div class="subtasks">${subtasksHtml}</div>` : ''}
             <div class="card-actions">
