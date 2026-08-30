@@ -674,6 +674,8 @@
         "done": false
       }
     ],
-    "subKanban": []
+    "subKanban": [],
+    "linkUrl": "",
+    "color": "rose"
   }
 ]
