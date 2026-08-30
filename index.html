@@ -14,6 +14,7 @@
     --text-muted: #8b949e;
     --accent: #4a72ff;
     --accent-hover: #3b5bdb;
+    --purple: #9775fa;
     --danger: #e03131;
     --prio-high: #fa5252;
     --prio-med: #fd7e14;
@@ -23,24 +24,28 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
   body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; min-height: 100vh; }
   
-  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-  h1 { font-size: 1.4rem; font-weight: 700; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  h1 { font-size: 1.35rem; font-weight: 700; }
+  .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: var(--text-muted); }
+  .breadcrumbs span.current { color: var(--text-main); font-weight: 600; }
 
   .header-actions { display: flex; gap: 8px; }
 
   button.btn-primary {
-    background: var(--accent); color: white; border: none; padding: 10px 16px;
-    border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s;
+    background: var(--accent); color: white; border: none; padding: 9px 15px;
+    border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s; font-size: 0.85rem;
   }
   button.btn-primary:hover { background: var(--accent-hover); }
   button.btn-secondary {
     background: transparent; border: 1px solid var(--border); color: var(--text-main);
-    padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;
+    padding: 9px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem;
   }
   button.btn-secondary:hover { background: var(--bg-card); }
+  button.btn-back { background: #252a36; border: 1px solid var(--border); color: var(--text-main); }
 
   .status-bar {
-    font-size: 0.85rem; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px;
+    font-size: 0.8rem; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px;
     background: var(--bg-column); border: 1px solid var(--border); display: flex;
     justify-content: space-between; align-items: center;
   }
@@ -59,7 +64,7 @@
 
   .column-header {
     display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
-    font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;
+    font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;
   }
 
   .task-list { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
@@ -75,10 +80,9 @@
 
   .card-top { display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer; user-select: none; }
   .card-top-left { display: flex; flex-direction: column; gap: 2px; }
-  .card-title { font-weight: 700; font-size: 1.05rem; }
+  .card-title { font-weight: 700; font-size: 1rem; }
   .card-client { font-size: 0.85rem; color: var(--text-muted); }
-  .card-contact { font-size: 0.8rem; color: var(--accent); text-decoration: none; margin-top: 2px; display: inline-block; }
-  .card-contact:hover { text-decoration: underline; }
+  .card-contact { font-size: 0.8rem; color: var(--accent); text-decoration: none; margin-top: 2px; }
   
   .card-top-right { display: flex; align-items: center; gap: 6px; }
   .badge { padding: 2px 6px; border-radius: 4px; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; }
@@ -93,6 +97,22 @@
 
   .card-meta { display: flex; gap: 8px; font-size: 0.75rem; align-items: center; }
   .deadline { color: var(--text-muted); }
+
+  .subkanban-trigger {
+    background: rgba(151, 117, 250, 0.1);
+    border: 1px solid rgba(151, 117, 250, 0.3);
+    color: var(--purple);
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+  }
+  .subkanban-trigger:hover { background: rgba(151, 117, 250, 0.2); }
 
   .subtasks { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
   .subtask-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
@@ -113,7 +133,7 @@
   .btn-delete { color: var(--danger); }
 
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
     display: none; justify-content: center; align-items: center; padding: 16px; z-index: 100;
   }
   .modal-overlay.active { display: flex; }
@@ -134,10 +154,12 @@
 <body>
 
 <header>
-  <h1>Studio Kanban</h1>
+  <div class="header-left">
+    <div id="navContainer"></div>
+  </div>
   <div class="header-actions">
     <button class="btn-secondary" onclick="openSettingsModal()">⚙️ GitHub Sync</button>
-    <button class="btn-primary" onclick="openProjectModal()">+ Nowy projekt</button>
+    <button class="btn-primary" onclick="openProjectModal()">+ Nowa karta</button>
   </div>
 </header>
 
@@ -146,7 +168,7 @@
     <span id="syncIndicator" class="sync-indicator sync-inactive"></span>
     <span id="syncText">Synchronizacja: Wyłączona</span>
   </div>
-  <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="loadFromGitHub()">Odśwież dane</button>
+  <button class="btn-secondary" style="padding: 3px 8px; font-size: 0.75rem;" onclick="loadFromGitHub()">Odśwież</button>
 </div>
 
 <div class="board">
@@ -170,19 +192,19 @@
 
 <div class="modal-overlay" id="projectModal">
   <div class="modal">
-    <h2 id="modalTitle">Dodaj nowy projekt</h2>
+    <h2 id="modalTitle">Dodaj nową kartę</h2>
     <input type="hidden" id="editProjectId">
     <div class="form-group">
-      <label>Tytuł utworu / Nazwa projektu</label>
-      <input type="text" id="trackTitle" placeholder="np. Nowy Utwór" required>
+      <label>Nazwa projektu / Tytuł utworu</label>
+      <input type="text" id="trackTitle" placeholder="np. Płyta Andrzeja / Utwór 01" required>
     </div>
     <div class="form-group">
-      <label>Klient / Artysta</label>
-      <input type="text" id="clientName" placeholder="np. Jan Kowalski">
+      <label>Klient / Wykonawca</label>
+      <input type="text" id="clientName" placeholder="np. Andrzej Kowalski">
     </div>
     <div class="form-group">
-      <label>Kontakt / E-mail klienta</label>
-      <input type="text" id="clientContact" placeholder="np. kontakt@klient.pl lub +48 ...">
+      <label>Kontakt / E-mail</label>
+      <input type="text" id="clientContact" placeholder="np. kontakt@klient.pl lub tel.">
     </div>
     <div class="form-group">
       <label>Deadline</label>
@@ -198,7 +220,7 @@
     </div>
     <div class="form-group">
       <label>Etapy / Checklist (każdy etap w nowej linii)</label>
-      <textarea id="subtasks" rows="4" placeholder="Kompozycja&#10;Aranżacja&#10;Nagrania instrumentów&#10;Miks&#10;Mastering"></textarea>
+      <textarea id="subtasks" rows="3" placeholder="Kompozycja&#10;Aranżacja&#10;Miks&#10;Mastering"></textarea>
     </div>
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeProjectModal()">Anuluj</button>
@@ -219,7 +241,7 @@
       <input type="text" id="ghRepo" placeholder="np. kanban-studio">
     </div>
     <div class="form-group">
-      <label>Personal Access Token (Fine-grained / Classic)</label>
+      <label>Personal Access Token (PAT)</label>
       <input type="password" id="ghToken" placeholder="github_pat_...">
     </div>
     <div class="modal-buttons">
@@ -230,7 +252,8 @@
 </div>
 
 <script>
-  let projects = [];
+  let rootProjects = [];
+  let currentParentId = null; // null = widok główny, ID = podgląd sub-kanbana
   let fileSha = null;
 
   let ghConfig = JSON.parse(localStorage.getItem('gh_kanban_config')) || {
@@ -238,20 +261,27 @@
   };
 
   function updateStatus(active, text) {
-    const ind = document.getElementById('syncIndicator');
-    const txt = document.getElementById('syncText');
-    ind.className = `sync-indicator ${active ? 'sync-active' : 'sync-inactive'}`;
-    txt.textContent = text;
+    document.getElementById('syncIndicator').className = `sync-indicator ${active ? 'sync-active' : 'sync-inactive'}`;
+    document.getElementById('syncText').textContent = text;
+  }
+
+  function getActiveArray() {
+    if (currentParentId === null) return rootProjects;
+    const parent = rootProjects.find(p => p.id === currentParentId);
+    if (!parent) { currentParentId = null; return rootProjects; }
+    if (!parent.subKanban) parent.subKanban = [];
+    return parent.subKanban;
   }
 
   function openProjectModal(editId = null) {
     const modalTitle = document.getElementById('modalTitle');
     const editIdInput = document.getElementById('editProjectId');
+    const activeList = getActiveArray();
 
     if (editId) {
-      const proj = projects.find(p => p.id === editId);
+      const proj = activeList.find(p => p.id === editId);
       if (!proj) return;
-      modalTitle.textContent = "Edytuj projekt";
+      modalTitle.textContent = "Edytuj kartę";
       editIdInput.value = proj.id;
       document.getElementById('trackTitle').value = proj.title;
       document.getElementById('clientName').value = proj.client || '';
@@ -260,7 +290,7 @@
       document.getElementById('priority').value = proj.priority || '2';
       document.getElementById('subtasks').value = (proj.subtasks || []).map(s => s.text).join('\n');
     } else {
-      modalTitle.textContent = "Dodaj nowy projekt";
+      modalTitle.textContent = currentParentId ? "Dodaj utwór / zadanie podrzędne" : "Dodaj nową kartę projektu";
       editIdInput.value = "";
       document.getElementById('trackTitle').value = '';
       document.getElementById('clientName').value = '';
@@ -316,9 +346,9 @@
       });
 
       if (res.status === 404) {
-        projects = [];
+        rootProjects = [];
         fileSha = null;
-        updateStatus(true, "Połączono z GitHub. Utworzono nową bazę.");
+        updateStatus(true, "Połączono. Utworzono nową bazę.");
         renderBoard();
         return;
       }
@@ -328,31 +358,28 @@
       const data = await res.json();
       fileSha = data.sha;
       const decodedContent = decodeURIComponent(escape(atob(data.content)));
-      projects = JSON.parse(decodedContent);
+      rootProjects = JSON.parse(decodedContent);
 
-      updateStatus(true, "Zsynchronizowano z GitHub API.");
+      updateStatus(true, "Zsynchronizowano z GitHub.");
       renderBoard();
     } catch (err) {
       console.error(err);
-      updateStatus(false, `Błąd synchronizacji: ${err.message}`);
+      updateStatus(false, `Błąd: ${err.message}`);
     }
   }
 
   async function syncToGitHub() {
     renderBoard();
-    if (!ghConfig.user || !ghConfig.repo || !ghConfig.token) {
-      alert("Brak tokena GitHub API! Zmiany zapisują się tylko lokalnie.");
-      return;
-    }
+    if (!ghConfig.user || !ghConfig.repo || !ghConfig.token) return;
 
     updateStatus(false, "Zapisywanie na GitHubie...");
     const url = `https://api.github.com/repos/${ghConfig.user}/${ghConfig.repo}/contents/data.json`;
     
-    const contentString = JSON.stringify(projects, null, 2);
+    const contentString = JSON.stringify(rootProjects, null, 2);
     const base64Content = btoa(unescape(encodeURIComponent(contentString)));
 
     const bodyData = {
-      message: "Aktualizacja tablicy Kanban [Studio]",
+      message: "Aktualizacja Kanban [Studio]",
       content: base64Content
     };
     if (fileSha) bodyData.sha = fileSha;
@@ -381,7 +408,7 @@
 
   function saveProject() {
     const title = document.getElementById('trackTitle').value.trim();
-    if (!title) return alert('Wpisz tytuł projektu!');
+    if (!title) return alert('Wpisz tytuł!');
 
     const editId = document.getElementById('editProjectId').value;
     const client = document.getElementById('clientName').value.trim();
@@ -390,8 +417,10 @@
     const priority = parseInt(document.getElementById('priority').value);
     const rawSubtasks = document.getElementById('subtasks').value.split('\n');
 
+    const activeList = getActiveArray();
+
     if (editId) {
-      const proj = projects.find(p => p.id === parseInt(editId));
+      const proj = activeList.find(p => p.id === parseInt(editId));
       if (proj) {
         proj.title = title;
         proj.client = client;
@@ -399,16 +428,11 @@
         proj.deadline = deadline;
         proj.priority = priority;
         
-        // Zachowanie stanu ukończenia istniejących podpunktów
-        const oldSubtasksMap = new Map((proj.subtasks || []).map(s => [s.text, s.done]));
+        const oldMap = new Map((proj.subtasks || []).map(s => [s.text, s.done]));
         proj.subtasks = rawSubtasks
           .map(t => t.trim())
           .filter(t => t.length > 0)
-          .map((text, idx) => ({
-            id: idx,
-            text,
-            done: oldSubtasksMap.has(text) ? oldSubtasksMap.get(text) : false
-          }));
+          .map((text, idx) => ({ id: idx, text, done: oldMap.has(text) ? oldMap.get(text) : false }));
       }
     } else {
       const subtasks = rawSubtasks
@@ -425,17 +449,28 @@
         priority,
         status: 'todo',
         collapsed: false,
-        subtasks
+        subtasks,
+        subKanban: []
       };
-      projects.push(newProject);
+      activeList.push(newProject);
     }
 
     closeProjectModal();
     syncToGitHub();
   }
 
+  function openSubKanban(id) {
+    currentParentId = id;
+    renderBoard();
+  }
+
+  function exitSubKanban() {
+    currentParentId = null;
+    renderBoard();
+  }
+
   function toggleCardCollapse(projId) {
-    const proj = projects.find(p => p.id === projId);
+    const proj = getActiveArray().find(p => p.id === projId);
     if (proj) {
       proj.collapsed = !proj.collapsed;
       syncToGitHub();
@@ -443,7 +478,7 @@
   }
 
   function toggleSubtask(projId, subtaskId) {
-    const proj = projects.find(p => p.id === projId);
+    const proj = getActiveArray().find(p => p.id === projId);
     if (proj) {
       const task = proj.subtasks.find(s => s.id === subtaskId);
       if (task) task.done = !task.done;
@@ -452,7 +487,7 @@
   }
 
   function moveProject(projId, targetStatus) {
-    const proj = projects.find(p => p.id === projId);
+    const proj = getActiveArray().find(p => p.id === projId);
     if (proj) {
       proj.status = targetStatus;
       syncToGitHub();
@@ -460,8 +495,13 @@
   }
 
   function deleteProject(projId) {
-    if (confirm('Usunąć ten projekt?')) {
-      projects = projects.filter(p => p.id !== projId);
+    if (confirm('Usunąć tę kartę wraz ze wszystkimi jej danymi?')) {
+      if (currentParentId === null) {
+        rootProjects = rootProjects.filter(p => p.id !== projId);
+      } else {
+        const parent = rootProjects.find(p => p.id === currentParentId);
+        if (parent) parent.subKanban = parent.subKanban.filter(p => p.id !== projId);
+      }
       syncToGitHub();
     }
   }
@@ -473,13 +513,28 @@
   }
 
   function renderBoard() {
+    const navContainer = document.getElementById('navContainer');
+    if (currentParentId === null) {
+      navContainer.innerHTML = `<h1>Studio Kanban</h1>`;
+    } else {
+      const parent = rootProjects.find(p => p.id === currentParentId);
+      navContainer.innerHTML = `
+        <div class="breadcrumbs">
+          <button class="btn-secondary btn-back" onclick="exitSubKanban()">⬅ Wróć do tablicy głównej</button>
+          <span>/</span>
+          <span class="current">🗂️ ${parent ? parent.title : 'Sub-Kanban'}</span>
+        </div>
+      `;
+    }
+
+    const activeList = getActiveArray();
     const statuses = ['todo', 'progress', 'done', 'freezer'];
     
     statuses.forEach(status => {
       const listEl = document.getElementById(`list-${status}`);
       listEl.innerHTML = '';
       
-      const filtered = projects
+      const filtered = activeList
         .filter(p => p.status === status)
         .sort((a, b) => b.priority - a.priority);
 
@@ -505,6 +560,21 @@
           contactHtml = `<a class="card-contact" href="${href}" onclick="event.stopPropagation()">✉️ ${p.contact}</a>`;
         }
 
+        // Sub-kanban button widoczny tylko na poziomie głównym
+        let subKanbanBtnHtml = '';
+        if (currentParentId === null) {
+          const countDone = (p.subKanban || []).filter(item => item.status === 'done').length;
+          const countTotal = (p.subKanban || []).length;
+          const labelCount = countTotal > 0 ? ` (${countDone}/${countTotal} Done)` : '';
+          
+          subKanbanBtnHtml = `
+            <div class="subkanban-trigger" onclick="event.stopPropagation(); openSubKanban(${p.id})">
+              <span>🗂️ Otwórz Sub-Kanban (utwory/podprojekty)</span>
+              <span>${labelCount} ➔</span>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
           <div class="card-top" onclick="toggleCardCollapse(${p.id})">
             <div class="card-top-left">
@@ -520,6 +590,7 @@
 
           <div class="card-body">
             ${p.deadline ? `<div class="card-meta"><span class="deadline">📅 ${p.deadline}</span></div>` : ''}
+            ${subKanbanBtnHtml}
             ${(p.subtasks && p.subtasks.length) ? `<div class="subtasks">${subtasksHtml}</div>` : ''}
             <div class="card-actions">
               <select onchange="moveProject(${p.id}, this.value)">
