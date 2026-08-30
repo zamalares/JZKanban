@@ -703,7 +703,7 @@
     "priority": 2,
     "color": "teal",
     "status": "progress",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
