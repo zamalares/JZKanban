@@ -886,6 +886,21 @@
         "collapsed": true,
         "subtasks": [],
         "subKanban": []
+      },
+      {
+        "id": 1788095654440,
+        "title": "10 DOCTOR/JAZZ FESTIVAL",
+        "notes": "",
+        "linkUrl": "",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "color": "default",
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [],
+        "subKanban": []
       }
     ]
   }
