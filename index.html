@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Kanban</title>
+<style>
+  :root {
+    --bg-main: #121418;
+    --bg-card: #1e222b;
+    --bg-column: #181b22;
+    --border: #2d3342;
+    --text-main: #f1f3f7;
+    --text-muted: #8b949e;
+    --accent: #4a72ff;
+    --accent-hover: #3b5bdb;
+    --danger: #e03131;
+    --prio-high: #fa5252;
+    --prio-med: #fd7e14;
+    --prio-low: #51cf66;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; min-height: 100vh; }
+  
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: 1.4rem; font-weight: 700; }
+
+  .header-actions { display: flex; gap: 8px; }
+
+  button.btn-primary {
+    background: var(--accent); color: white; border: none; padding: 10px 16px;
+    border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s;
+  }
+  button.btn-primary:hover { background: var(--accent-hover); }
+  button.btn-secondary {
+    background: transparent; border: 1px solid var(--border); color: var(--text-main);
+    padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;
+  }
+  button.btn-secondary:hover { background: var(--bg-card); }
+
+  .status-bar {
+    font-size: 0.85rem; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px;
+    background: var(--bg-column); border: 1px solid var(--border); display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .sync-indicator { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .sync-active { background: #51cf66; }
+  .sync-inactive { background: #fa5252; }
+
+  .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: flex-start; }
+  @media (max-width: 1100px) { .board { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .board { grid-template-columns: 1fr; } }
+
+  .column {
+    background: var(--bg-column); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; min-height: 500px; display: flex; flex-direction: column;
+  }
+
+  .column-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+    font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;
+  }
+
+  .task-list { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
+
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .card.prio-high { border-left: 4px solid var(--prio-high); }
+  .card.prio-med { border-left: 4px solid var(--prio-med); }
+  .card.prio-low { border-left: 4px solid var(--prio-low); }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-title { font-weight: 700; font-size: 1.05rem; }
+  .card-client { font-size: 0.85rem; color: var(--text-muted); }
+  
+  .card-meta { display: flex; gap: 8px; font-size: 0.75rem; align-items: center; }
+  .badge { padding: 2px 6px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
+  .badge-high { background: rgba(250, 82, 82, 0.2); color: var(--prio-high); }
+  .badge-med { background: rgba(253, 126, 20, 0.2); color: var(--prio-med); }
+  .badge-low { background: rgba(81, 207, 102, 0.2); color: var(--prio-low); }
+  .deadline { color: var(--text-muted); }
+
+  .subtasks { display: flex; flex-direction: column; gap: 6px; margin: 4px 0; font-size: 0.85rem; }
+  .subtask-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .subtask-item input { cursor: pointer; accent-color: var(--accent); }
+  .subtask-item.done span { text-decoration: line-through; color: var(--text-muted); }
+
+  .card-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 6px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .card-actions select {
+    background: #14171d; color: var(--text-main); border: 1px solid var(--border);
+    border-radius: 4px; padding: 4px 6px; font-size: 0.75rem;
+  }
+  .btn-delete { background: transparent; border: none; color: var(--danger); font-size: 0.75rem; cursor: pointer; }
+
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+    display: none; justify-content: center; align-items: center; padding: 16px; z-index: 100;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.8rem; color: var(--text-muted); }
+  .form-group input, .form-group select, .form-group textarea {
+    background: var(--bg-main); border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 10px; color: var(--text-main); font-size: 0.9rem;
+  }
+  .modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+  .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Studio Kanban</h1>
+  <div class="header-actions">
+    <button class="btn-secondary" onclick="openSettingsModal()">⚙️ GitHub Sync</button>
+    <button class="btn-primary" onclick="openProjectModal()">+ Nowy projekt</button>
+  </div>
+</header>
+
+<div class="status-bar">
+  <div>
+    <span id="syncIndicator" class="sync-indicator sync-inactive"></span>
+    <span id="syncText">Synchronizacja z GitHub: Wyłączona (brak tokena)</span>
+  </div>
+  <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="loadFromGitHub()">Odśwież dane</button>
+</div>
+
+<div class="board">
+  <div class="column" id="col-todo">
+    <div class="column-header"><span>To Do</span><span class="count">0</span></div>
+    <div class="task-list" id="list-todo"></div>
+  </div>
+  <div class="column" id="col-progress">
+    <div class="column-header"><span>In Progress</span><span class="count">0</span></div>
+    <div class="task-list" id="list-progress"></div>
+  </div>
+  <div class="column" id="col-done">
+    <div class="column-header"><span>Done</span><span class="count">0</span></div>
+    <div class="task-list" id="list-done"></div>
+  </div>
+  <div class="column" id="col-freezer">
+    <div class="column-header"><span>Freezer ❄️</span><span class="count">0</span></div>
+    <div class="task-list" id="list-freezer"></div>
+  </div>
+</div>
+
+<!-- Modal Projektu -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <h2>Dodaj nowy projekt</h2>
+    <div class="form-group">
+      <label>Tytuł utworu / Nazwa projektu</label>
+      <input type="text" id="trackTitle" placeholder="np. Nowy Utwór" required>
+    </div>
+    <div class="form-group">
+      <label>Klient / Artysta</label>
+      <input type="text" id="clientName" placeholder="np. Jan Kowalski">
+    </div>
+    <div class="form-group">
+      <label>Deadline</label>
+      <input type="date" id="deadline">
+    </div>
+    <div class="form-group">
+      <label>Priorytet</label>
+      <select id="priority">
+        <option value="3">Wysoki</option>
+        <option value="2" selected>Średni</option>
+        <option value="1">Niski</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Etapy / Checklist (każdy etap w nowej linii)</label>
+      <textarea id="subtasks" rows="4" placeholder="Kompozycja&#10;Aranżacja&#10;Nagrania instrumentów&#10;Miks&#10;Mastering"></textarea>
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeProjectModal()">Anuluj</button>
+      <button class="btn-primary" onclick="saveProject()">Zapisz projekt</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ustawień GitHuba -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h2>Ustawienia GitHub API</h2>
+    <div class="form-group">
+      <label>Nazwa użytkownika GitHub</label>
+      <input type="text" id="ghUser" placeholder="np. octocat">
+    </div>
+    <div class="form-group">
+      <label>Nazwa Repozytorium</label>
+      <input type="text" id="ghRepo" placeholder="np. kanban-studio">
+    </div>
+    <div class="form-group">
+      <label>Personal Access Token (Fine-grained / Classic)</label>
+      <input type="password" id="ghToken" placeholder="github_pat_...">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeSettingsModal()">Anuluj</button>
+      <button class="btn-primary" onclick="saveSettings()">Zapisz i Połącz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let projects = [];
+  let fileSha = null;
+
+  let ghConfig = JSON.parse(localStorage.getItem('gh_kanban_config')) || {
+    user: '', repo: '', token: ''
+  };
+
+  function updateStatus(active, text) {
+    const ind = document.getElementById('syncIndicator');
+    const txt = document.getElementById('syncText');
+    ind.className = `sync-indicator ${active ? 'sync-active' : 'sync-inactive'}`;
+    txt.textContent = text;
+  }
+
+  function openProjectModal() {
+    document.getElementById('projectModal').classList.add('active');
+    document.getElementById('trackTitle').focus();
+  }
+  function closeProjectModal() {
+    document.getElementById('projectModal').classList.remove('active');
+    document.getElementById('trackTitle').value = '';
+    document.getElementById('clientName').value = '';
+    document.getElementById('deadline').value = '';
+    document.getElementById('subtasks').value = '';
+    document.getElementById('priority').value = '2';
+  }
+
+  function openSettingsModal() {
+    document.getElementById('ghUser').value = ghConfig.user || '';
+    document.getElementById('ghRepo').value = ghConfig.repo || '';
+    document.getElementById('ghToken').value = ghConfig.token || '';
+    document.getElementById('settingsModal').classList.add('active');
+  }
+  function closeSettingsModal() {
+    document.getElementById('settingsModal').classList.remove('active');
+  }
+
+  function saveSettings() {
+    ghConfig.user = document.getElementById('ghUser').value.trim();
+    ghConfig.repo = document.getElementById('ghRepo').value.trim();
+    ghConfig.token = document.getElementById('ghToken').value.trim();
+    
+    localStorage.setItem('gh_kanban_config', JSON.stringify(ghConfig));
+    closeSettingsModal();
+    loadFromGitHub();
+  }
+
+  async function loadFromGitHub() {
+    if (!ghConfig.user || !ghConfig.repo || !ghConfig.token) {
+      updateStatus(false, "Brak danych konfiguracji GitHub API.");
+      return;
+    }
+
+    updateStatus(false, "Pobieranie danych z GitHuba...");
+    const url = `https://api.github.com/repos/${ghConfig.user}/${ghConfig.repo}/contents/data.json`;
+
+    try {
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': `token ${ghConfig.token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+
+      if (res.status === 404) {
+        // Plik nie istnieje jeszcze, utworzymy go przy pierwszym zapisie
+        projects = [];
+        fileSha = null;
+        updateStatus(true, "Połączono z GitHub. Utworzono nową bazę.");
+        renderBoard();
+        return;
+      }
+
+      if (!res.ok) throw new Error(`Błąd HTTP: ${res.status}`);
+
+      const data = await res.json();
+      fileSha = data.sha;
+      
+      // Dekodowanie UTF-8 ze stringa base64
+      const decodedContent = decodeURIComponent(escape(atob(data.content)));
+      projects = JSON.parse(decodedContent);
+
+      updateStatus(true, "Zsynchronizowano z GitHub API.");
+      renderBoard();
+    } catch (err) {
+      console.error(err);
+      updateStatus(false, `Błąd synchronizacji: ${err.message}`);
+    }
+  }
+
+  async function syncToGitHub() {
+    renderBoard();
+    if (!ghConfig.user || !ghConfig.repo || !ghConfig.token) {
+      alert("Brak skonfigurowanego tokena GitHub API! Zmiany nie zostaną zapisane w chmurze.");
+      return;
+    }
+
+    updateStatus(false, "Zapisywanie zmian na GitHubie...");
+    const url = `https://api.github.com/repos/${ghConfig.user}/${ghConfig.repo}/contents/data.json`;
+    
+    // Kodowanie UTF-8 do base64
+    const contentString = JSON.stringify(projects, null, 2);
+    const base64Content = btoa(unescape(encodeURIComponent(contentString)));
+
+    const bodyData = {
+      message: "Aktualizacja tablicy Kanban [Studio]",
+      content: base64Content
+    };
+    if (fileSha) bodyData.sha = fileSha;
+
+    try {
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${ghConfig.token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify(bodyData)
+      });
+
+      if (!res.ok) throw new Error(`Błąd zapisu: ${res.status}`);
+
+      const resData = await res.json();
+      fileSha = resData.content.sha;
+      updateStatus(true, "Zmiany zapisane na GitHubie.");
+    } catch (err) {
+      console.error(err);
+      updateStatus(false, `Błąd zapisu: ${err.message}`);
+    }
+  }
+
+  function saveProject() {
+    const title = document.getElementById('trackTitle').value.trim();
+    if (!title) return alert('Wpisz tytuł projektu!');
+
+    const client = document.getElementById('clientName').value.trim();
+    const deadline = document.getElementById('deadline').value;
+    const priority = parseInt(document.getElementById('priority').value);
+    const rawSubtasks = document.getElementById('subtasks').value.split('\n');
+    
+    const subtasks = rawSubtasks
+      .map(t => t.trim())
+      .filter(t => t.length > 0)
+      .map((text, idx) => ({ id: idx, text, done: false }));
+
+    const newProject = {
+      id: Date.now(),
+      title,
+      client,
+      deadline,
+      priority,
+      status: 'todo',
+      subtasks
+    };
+
+    projects.push(newProject);
+    closeProjectModal();
+    syncToGitHub();
+  }
+
+  function toggleSubtask(projId, subtaskId) {
+    const proj = projects.find(p => p.id === projId);
+    if (proj) {
+      const task = proj.subtasks.find(s => s.id === subtaskId);
+      if (task) task.done = !task.done;
+      syncToGitHub();
+    }
+  }
+
+  function moveProject(projId, targetStatus) {
+    const proj = projects.find(p => p.id === projId);
+    if (proj) {
+      proj.status = targetStatus;
+      syncToGitHub();
+    }
+  }
+
+  function deleteProject(projId) {
+    if (confirm('Usunąć ten projekt?')) {
+      projects = projects.filter(p => p.id !== projId);
+      syncToGitHub();
+    }
+  }
+
+  function getPriorityMeta(prio) {
+    if (prio === 3) return { class: 'prio-high', badgeClass: 'badge-high', label: 'Wysoki' };
+    if (prio === 2) return { class: 'prio-med', badgeClass: 'badge-med', label: 'Średni' };
+    return { class: 'prio-low', badgeClass: 'badge-low', label: 'Niski' };
+  }
+
+  function renderBoard() {
+    const statuses = ['todo', 'progress', 'done', 'freezer'];
+    
+    statuses.forEach(status => {
+      const listEl = document.getElementById(`list-${status}`);
+      listEl.innerHTML = '';
+      
+      const filtered = projects
+        .filter(p => p.status === status)
+        .sort((a, b) => b.priority - a.priority);
+
+      document.querySelector(`#col-${status} .count`).textContent = filtered.length;
+
+      filtered.forEach(p => {
+        const prioInfo = getPriorityMeta(p.priority);
+        const card = document.createElement('div');
+        card.className = `card ${prioInfo.class}`;
+
+        let subtasksHtml = p.subtasks.map(s => `
+          <label class="subtask-item ${s.done ? 'done' : ''}">
+            <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleSubtask(${p.id}, ${s.id})">
+            <span>${s.text}</span>
+          </label>
+        `).join('');
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <div class="card-title">${p.title}</div>
+              <div class="card-client">${p.client || 'Brak klienta'}</div>
+            </div>
+            <span class="badge ${prioInfo.badgeClass}">${prioInfo.label}</span>
+          </div>
+          ${p.deadline ? `<div class="card-meta"><span class="deadline">📅 ${p.deadline}</span></div>` : ''}
+          ${p.subtasks.length ? `<div class="subtasks">${subtasksHtml}</div>` : ''}
+          <div class="card-actions">
+            <select onchange="moveProject(${p.id}, this.value)">
+              <option value="todo" ${p.status === 'todo' ? 'selected' : ''}>To Do</option>
+              <option value="progress" ${p.status === 'progress' ? 'selected' : ''}>In Progress</option>
+              <option value="done" ${p.status === 'done' ? 'selected' : ''}>Done</option>
+              <option value="freezer" ${p.status === 'freezer' ? 'selected' : ''}>Freezer</option>
+            </select>
+            <button class="btn-delete" onclick="deleteProject(${p.id})">Usuń</button>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    });
+  }
+
+  // Automatyczne załadowanie konfiguracji przy starcie
+  if (ghConfig.user && ghConfig.repo && ghConfig.token) {
+    loadFromGitHub();
+  } else {
+    renderBoard();
+  }
+</script>
+</body>
+</html>
