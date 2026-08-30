@@ -47,7 +47,7 @@
         "done": false
       }
     ],
-    "collapsed": true,
+    "collapsed": false,
     "contact": "",
     "linkUrl": "",
     "color": "purple"
@@ -129,7 +129,7 @@
     "deadline": "",
     "priority": 2,
     "status": "todo",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [],
     "subKanban": [
       {
