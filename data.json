@@ -141,7 +141,7 @@
         "contact": "",
         "deadline": "",
         "priority": 2,
-        "status": "todo",
+        "status": "done",
         "collapsed": false,
         "subtasks": [],
         "subKanban": []
