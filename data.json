@@ -930,7 +930,7 @@
     "priority": 2,
     "color": "amber",
     "status": "todo",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
