@@ -18,7 +18,7 @@
   {
     "id": 1788092969064,
     "title": "Fire walk with me",
-    "client": "Piotr",
+    "client": "Nowak/Szaja",
     "deadline": "",
     "priority": 2,
     "status": "progress",
@@ -44,7 +44,8 @@
         "done": false
       }
     ],
-    "collapsed": false
+    "collapsed": false,
+    "contact": ""
   },
   {
     "id": 1788093304939,
