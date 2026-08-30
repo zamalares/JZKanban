@@ -781,6 +781,21 @@
         "collapsed": true,
         "subtasks": [],
         "subKanban": []
+      },
+      {
+        "id": 1788095541836,
+        "title": "03 SITTING IN THE BAR",
+        "notes": "",
+        "linkUrl": "",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "color": "default",
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [],
+        "subKanban": []
       }
     ]
   }
