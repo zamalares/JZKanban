@@ -762,7 +762,7 @@
         "deadline": "",
         "priority": 2,
         "color": "default",
-        "status": "todo",
+        "status": "done",
         "collapsed": false,
         "subtasks": [],
         "subKanban": []
