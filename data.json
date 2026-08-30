@@ -750,7 +750,7 @@
     "priority": 2,
     "color": "green",
     "status": "todo",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [],
     "subKanban": [
       {
