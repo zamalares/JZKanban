@@ -628,7 +628,7 @@
       {
         "id": 1,
         "text": "Nagranie instrumentów",
-        "done": false
+        "done": true
       },
       {
         "id": 2,
