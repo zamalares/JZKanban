@@ -826,6 +826,21 @@
         "collapsed": true,
         "subtasks": [],
         "subKanban": []
+      },
+      {
+        "id": 1788095597321,
+        "title": "06 MATERIALIST",
+        "notes": "",
+        "linkUrl": "",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "color": "default",
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [],
+        "subKanban": []
       }
     ]
   }
