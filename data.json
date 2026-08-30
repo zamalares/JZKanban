@@ -4,7 +4,7 @@
     "title": "Uwertura",
     "client": "Jędrzej Pasalski",
     "deadline": "2026-08-30",
-    "priority": 2,
+    "priority": 3,
     "status": "progress",
     "subtasks": [
       {
@@ -16,7 +16,8 @@
     "collapsed": false,
     "linkUrl": "",
     "contact": "",
-    "color": "amber"
+    "color": "amber",
+    "notes": ""
   },
   {
     "id": 1788092969064,
