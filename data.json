@@ -617,8 +617,8 @@
     "contact": "",
     "deadline": "",
     "priority": 2,
-    "status": "todo",
-    "collapsed": true,
+    "status": "progress",
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
