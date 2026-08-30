@@ -66,37 +66,51 @@
 
   .card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
-    padding: 14px; display: flex; flex-direction: column; gap: 10px;
+    padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;
+    transition: all 0.2s ease;
   }
   .card.prio-high { border-left: 4px solid var(--prio-high); }
   .card.prio-med { border-left: 4px solid var(--prio-med); }
   .card.prio-low { border-left: 4px solid var(--prio-low); }
 
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer; user-select: none; }
+  .card-top-left { display: flex; flex-direction: column; gap: 2px; }
   .card-title { font-weight: 700; font-size: 1.05rem; }
   .card-client { font-size: 0.85rem; color: var(--text-muted); }
+  .card-contact { font-size: 0.8rem; color: var(--accent); text-decoration: none; margin-top: 2px; display: inline-block; }
+  .card-contact:hover { text-decoration: underline; }
   
-  .card-meta { display: flex; gap: 8px; font-size: 0.75rem; align-items: center; }
-  .badge { padding: 2px 6px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
+  .card-top-right { display: flex; align-items: center; gap: 6px; }
+  .badge { padding: 2px 6px; border-radius: 4px; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; }
   .badge-high { background: rgba(250, 82, 82, 0.2); color: var(--prio-high); }
   .badge-med { background: rgba(253, 126, 20, 0.2); color: var(--prio-med); }
   .badge-low { background: rgba(81, 207, 102, 0.2); color: var(--prio-low); }
+  .toggle-icon { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .card.collapsed .toggle-icon { transform: rotate(-90deg); }
+
+  .card-body { display: flex; flex-direction: column; gap: 10px; }
+  .card.collapsed .card-body { display: none; }
+
+  .card-meta { display: flex; gap: 8px; font-size: 0.75rem; align-items: center; }
   .deadline { color: var(--text-muted); }
 
-  .subtasks { display: flex; flex-direction: column; gap: 6px; margin: 4px 0; font-size: 0.85rem; }
+  .subtasks { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
   .subtask-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
   .subtask-item input { cursor: pointer; accent-color: var(--accent); }
   .subtask-item.done span { text-decoration: line-through; color: var(--text-muted); }
 
   .card-actions {
     display: flex; justify-content: space-between; align-items: center;
-    margin-top: 6px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05);
+    margin-top: 2px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05);
   }
+  .card-actions-buttons { display: flex; gap: 8px; }
   .card-actions select {
     background: #14171d; color: var(--text-main); border: 1px solid var(--border);
     border-radius: 4px; padding: 4px 6px; font-size: 0.75rem;
   }
-  .btn-delete { background: transparent; border: none; color: var(--danger); font-size: 0.75rem; cursor: pointer; }
+  .btn-action { background: transparent; border: none; font-size: 0.75rem; cursor: pointer; }
+  .btn-edit { color: var(--accent); }
+  .btn-delete { color: var(--danger); }
 
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
@@ -130,7 +144,7 @@
 <div class="status-bar">
   <div>
     <span id="syncIndicator" class="sync-indicator sync-inactive"></span>
-    <span id="syncText">Synchronizacja z GitHub: Wyłączona (brak tokena)</span>
+    <span id="syncText">Synchronizacja: Wyłączona</span>
   </div>
   <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="loadFromGitHub()">Odśwież dane</button>
 </div>
@@ -154,10 +168,10 @@
   </div>
 </div>
 
-<!-- Modal Projektu -->
 <div class="modal-overlay" id="projectModal">
   <div class="modal">
-    <h2>Dodaj nowy projekt</h2>
+    <h2 id="modalTitle">Dodaj nowy projekt</h2>
+    <input type="hidden" id="editProjectId">
     <div class="form-group">
       <label>Tytuł utworu / Nazwa projektu</label>
       <input type="text" id="trackTitle" placeholder="np. Nowy Utwór" required>
@@ -165,6 +179,10 @@
     <div class="form-group">
       <label>Klient / Artysta</label>
       <input type="text" id="clientName" placeholder="np. Jan Kowalski">
+    </div>
+    <div class="form-group">
+      <label>Kontakt / E-mail klienta</label>
+      <input type="text" id="clientContact" placeholder="np. kontakt@klient.pl lub +48 ...">
     </div>
     <div class="form-group">
       <label>Deadline</label>
@@ -184,12 +202,11 @@
     </div>
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeProjectModal()">Anuluj</button>
-      <button class="btn-primary" onclick="saveProject()">Zapisz projekt</button>
+      <button class="btn-primary" onclick="saveProject()">Zapisz</button>
     </div>
   </div>
 </div>
 
-<!-- Modal Ustawień GitHuba -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <h2>Ustawienia GitHub API</h2>
@@ -227,17 +244,38 @@
     txt.textContent = text;
   }
 
-  function openProjectModal() {
+  function openProjectModal(editId = null) {
+    const modalTitle = document.getElementById('modalTitle');
+    const editIdInput = document.getElementById('editProjectId');
+
+    if (editId) {
+      const proj = projects.find(p => p.id === editId);
+      if (!proj) return;
+      modalTitle.textContent = "Edytuj projekt";
+      editIdInput.value = proj.id;
+      document.getElementById('trackTitle').value = proj.title;
+      document.getElementById('clientName').value = proj.client || '';
+      document.getElementById('clientContact').value = proj.contact || '';
+      document.getElementById('deadline').value = proj.deadline || '';
+      document.getElementById('priority').value = proj.priority || '2';
+      document.getElementById('subtasks').value = (proj.subtasks || []).map(s => s.text).join('\n');
+    } else {
+      modalTitle.textContent = "Dodaj nowy projekt";
+      editIdInput.value = "";
+      document.getElementById('trackTitle').value = '';
+      document.getElementById('clientName').value = '';
+      document.getElementById('clientContact').value = '';
+      document.getElementById('deadline').value = '';
+      document.getElementById('subtasks').value = '';
+      document.getElementById('priority').value = '2';
+    }
+
     document.getElementById('projectModal').classList.add('active');
     document.getElementById('trackTitle').focus();
   }
+
   function closeProjectModal() {
     document.getElementById('projectModal').classList.remove('active');
-    document.getElementById('trackTitle').value = '';
-    document.getElementById('clientName').value = '';
-    document.getElementById('deadline').value = '';
-    document.getElementById('subtasks').value = '';
-    document.getElementById('priority').value = '2';
   }
 
   function openSettingsModal() {
@@ -262,11 +300,11 @@
 
   async function loadFromGitHub() {
     if (!ghConfig.user || !ghConfig.repo || !ghConfig.token) {
-      updateStatus(false, "Brak danych konfiguracji GitHub API.");
+      updateStatus(false, "Brak konfiguracji GitHub API.");
       return;
     }
 
-    updateStatus(false, "Pobieranie danych z GitHuba...");
+    updateStatus(false, "Pobieranie danych...");
     const url = `https://api.github.com/repos/${ghConfig.user}/${ghConfig.repo}/contents/data.json`;
 
     try {
@@ -278,7 +316,6 @@
       });
 
       if (res.status === 404) {
-        // Plik nie istnieje jeszcze, utworzymy go przy pierwszym zapisie
         projects = [];
         fileSha = null;
         updateStatus(true, "Połączono z GitHub. Utworzono nową bazę.");
@@ -290,8 +327,6 @@
 
       const data = await res.json();
       fileSha = data.sha;
-      
-      // Dekodowanie UTF-8 ze stringa base64
       const decodedContent = decodeURIComponent(escape(atob(data.content)));
       projects = JSON.parse(decodedContent);
 
@@ -306,14 +341,13 @@
   async function syncToGitHub() {
     renderBoard();
     if (!ghConfig.user || !ghConfig.repo || !ghConfig.token) {
-      alert("Brak skonfigurowanego tokena GitHub API! Zmiany nie zostaną zapisane w chmurze.");
+      alert("Brak tokena GitHub API! Zmiany zapisują się tylko lokalnie.");
       return;
     }
 
-    updateStatus(false, "Zapisywanie zmian na GitHubie...");
+    updateStatus(false, "Zapisywanie na GitHubie...");
     const url = `https://api.github.com/repos/${ghConfig.user}/${ghConfig.repo}/contents/data.json`;
     
-    // Kodowanie UTF-8 do base64
     const contentString = JSON.stringify(projects, null, 2);
     const base64Content = btoa(unescape(encodeURIComponent(contentString)));
 
@@ -338,7 +372,7 @@
 
       const resData = await res.json();
       fileSha = resData.content.sha;
-      updateStatus(true, "Zmiany zapisane na GitHubie.");
+      updateStatus(true, "Zapisano na GitHubie.");
     } catch (err) {
       console.error(err);
       updateStatus(false, `Błąd zapisu: ${err.message}`);
@@ -349,29 +383,63 @@
     const title = document.getElementById('trackTitle').value.trim();
     if (!title) return alert('Wpisz tytuł projektu!');
 
+    const editId = document.getElementById('editProjectId').value;
     const client = document.getElementById('clientName').value.trim();
+    const contact = document.getElementById('clientContact').value.trim();
     const deadline = document.getElementById('deadline').value;
     const priority = parseInt(document.getElementById('priority').value);
     const rawSubtasks = document.getElementById('subtasks').value.split('\n');
-    
-    const subtasks = rawSubtasks
-      .map(t => t.trim())
-      .filter(t => t.length > 0)
-      .map((text, idx) => ({ id: idx, text, done: false }));
 
-    const newProject = {
-      id: Date.now(),
-      title,
-      client,
-      deadline,
-      priority,
-      status: 'todo',
-      subtasks
-    };
+    if (editId) {
+      const proj = projects.find(p => p.id === parseInt(editId));
+      if (proj) {
+        proj.title = title;
+        proj.client = client;
+        proj.contact = contact;
+        proj.deadline = deadline;
+        proj.priority = priority;
+        
+        // Zachowanie stanu ukończenia istniejących podpunktów
+        const oldSubtasksMap = new Map((proj.subtasks || []).map(s => [s.text, s.done]));
+        proj.subtasks = rawSubtasks
+          .map(t => t.trim())
+          .filter(t => t.length > 0)
+          .map((text, idx) => ({
+            id: idx,
+            text,
+            done: oldSubtasksMap.has(text) ? oldSubtasksMap.get(text) : false
+          }));
+      }
+    } else {
+      const subtasks = rawSubtasks
+        .map(t => t.trim())
+        .filter(t => t.length > 0)
+        .map((text, idx) => ({ id: idx, text, done: false }));
 
-    projects.push(newProject);
+      const newProject = {
+        id: Date.now(),
+        title,
+        client,
+        contact,
+        deadline,
+        priority,
+        status: 'todo',
+        collapsed: false,
+        subtasks
+      };
+      projects.push(newProject);
+    }
+
     closeProjectModal();
     syncToGitHub();
+  }
+
+  function toggleCardCollapse(projId) {
+    const proj = projects.find(p => p.id === projId);
+    if (proj) {
+      proj.collapsed = !proj.collapsed;
+      syncToGitHub();
+    }
   }
 
   function toggleSubtask(projId, subtaskId) {
@@ -419,34 +487,52 @@
 
       filtered.forEach(p => {
         const prioInfo = getPriorityMeta(p.priority);
+        const isCollapsed = p.collapsed ? 'collapsed' : '';
         const card = document.createElement('div');
-        card.className = `card ${prioInfo.class}`;
+        card.className = `card ${prioInfo.class} ${isCollapsed}`;
 
-        let subtasksHtml = p.subtasks.map(s => `
+        let subtasksHtml = (p.subtasks || []).map(s => `
           <label class="subtask-item ${s.done ? 'done' : ''}">
             <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleSubtask(${p.id}, ${s.id})">
             <span>${s.text}</span>
           </label>
         `).join('');
 
+        let contactHtml = '';
+        if (p.contact) {
+          const isMail = p.contact.includes('@');
+          const href = isMail ? `mailto:${p.contact}` : `tel:${p.contact}`;
+          contactHtml = `<a class="card-contact" href="${href}" onclick="event.stopPropagation()">✉️ ${p.contact}</a>`;
+        }
+
         card.innerHTML = `
-          <div class="card-top">
-            <div>
+          <div class="card-top" onclick="toggleCardCollapse(${p.id})">
+            <div class="card-top-left">
               <div class="card-title">${p.title}</div>
               <div class="card-client">${p.client || 'Brak klienta'}</div>
+              ${contactHtml}
             </div>
-            <span class="badge ${prioInfo.badgeClass}">${prioInfo.label}</span>
+            <div class="card-top-right">
+              <span class="badge ${prioInfo.badgeClass}">${prioInfo.label}</span>
+              <span class="toggle-icon">▼</span>
+            </div>
           </div>
-          ${p.deadline ? `<div class="card-meta"><span class="deadline">📅 ${p.deadline}</span></div>` : ''}
-          ${p.subtasks.length ? `<div class="subtasks">${subtasksHtml}</div>` : ''}
-          <div class="card-actions">
-            <select onchange="moveProject(${p.id}, this.value)">
-              <option value="todo" ${p.status === 'todo' ? 'selected' : ''}>To Do</option>
-              <option value="progress" ${p.status === 'progress' ? 'selected' : ''}>In Progress</option>
-              <option value="done" ${p.status === 'done' ? 'selected' : ''}>Done</option>
-              <option value="freezer" ${p.status === 'freezer' ? 'selected' : ''}>Freezer</option>
-            </select>
-            <button class="btn-delete" onclick="deleteProject(${p.id})">Usuń</button>
+
+          <div class="card-body">
+            ${p.deadline ? `<div class="card-meta"><span class="deadline">📅 ${p.deadline}</span></div>` : ''}
+            ${(p.subtasks && p.subtasks.length) ? `<div class="subtasks">${subtasksHtml}</div>` : ''}
+            <div class="card-actions">
+              <select onchange="moveProject(${p.id}, this.value)">
+                <option value="todo" ${p.status === 'todo' ? 'selected' : ''}>To Do</option>
+                <option value="progress" ${p.status === 'progress' ? 'selected' : ''}>In Progress</option>
+                <option value="done" ${p.status === 'done' ? 'selected' : ''}>Done</option>
+                <option value="freezer" ${p.status === 'freezer' ? 'selected' : ''}>Freezer</option>
+              </select>
+              <div class="card-actions-buttons">
+                <button class="btn-action btn-edit" onclick="openProjectModal(${p.id})">Edytuj</button>
+                <button class="btn-action btn-delete" onclick="deleteProject(${p.id})">Usuń</button>
+              </div>
+            </div>
           </div>
         `;
         listEl.appendChild(card);
@@ -454,7 +540,6 @@
     });
   }
 
-  // Automatyczne załadowanie konfiguracji przy starcie
   if (ghConfig.user && ghConfig.repo && ghConfig.token) {
     loadFromGitHub();
   } else {
