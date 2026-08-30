@@ -807,7 +807,7 @@
         "deadline": "",
         "priority": 2,
         "color": "default",
-        "status": "todo",
+        "status": "progress",
         "collapsed": false,
         "subtasks": [],
         "subKanban": []
