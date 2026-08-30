@@ -747,9 +747,9 @@
     "contact": "",
     "deadline": "",
     "priority": 2,
-    "color": "slate",
+    "color": "green",
     "status": "todo",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [],
     "subKanban": [
       {
