@@ -110,5 +110,16 @@
         "done": false
       }
     ]
+  },
+  {
+    "id": 1788093445441,
+    "title": "Pod wierzbą wyśpiewane",
+    "client": "Andrzej Wierzbicki",
+    "contact": "",
+    "deadline": "",
+    "priority": 2,
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": []
   }
 ]
