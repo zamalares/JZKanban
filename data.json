@@ -972,7 +972,7 @@
     "priority": 2,
     "color": "blue",
     "status": "todo",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
