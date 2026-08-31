@@ -960,5 +960,36 @@
       }
     ],
     "subKanban": []
+  },
+  {
+    "id": 1788180535772,
+    "title": "TRAIN MAN",
+    "notes": "",
+    "linkUrl": "",
+    "client": "KACPER PIĄTEK",
+    "contact": "kacper.piatek02@gmail.com",
+    "deadline": "",
+    "priority": 2,
+    "color": "blue",
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Nagrania instr",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Nagrania bass wok",
+        "done": false
+      },
+      {
+        "id": 2,
+        "text": "MIx/Mastering",
+        "done": false
+      }
+    ],
+    "subKanban": []
   }
 ]
