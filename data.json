@@ -839,7 +839,7 @@
         "priority": 2,
         "color": "default",
         "status": "todo",
-        "collapsed": true,
+        "collapsed": false,
         "subtasks": [],
         "subKanban": []
       },
