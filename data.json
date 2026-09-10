@@ -652,7 +652,7 @@
       {
         "id": 3,
         "text": "Mix/Master",
-        "done": false
+        "done": true
       }
     ],
     "subKanban": [],
