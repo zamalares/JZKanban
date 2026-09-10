@@ -809,7 +809,7 @@
         "priority": 2,
         "color": "default",
         "status": "progress",
-        "collapsed": true,
+        "collapsed": false,
         "subtasks": [],
         "subKanban": []
       },
