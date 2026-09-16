@@ -35,12 +35,12 @@
       {
         "id": 1,
         "text": "Napisać smyczki",
-        "done": false
+        "done": true
       },
       {
         "id": 2,
         "text": "Nagranie wokali",
-        "done": true
+        "done": false
       },
       {
         "id": 3,
