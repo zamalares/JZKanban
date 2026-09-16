@@ -931,7 +931,7 @@
     "priority": 2,
     "color": "amber",
     "status": "progress",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
