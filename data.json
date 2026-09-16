@@ -131,7 +131,7 @@
     "deadline": "",
     "priority": 2,
     "status": "progress",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [],
     "subKanban": [
       {
