@@ -48,11 +48,12 @@
         "done": false
       }
     ],
-    "collapsed": false,
+    "collapsed": true,
     "contact": "",
     "linkUrl": "",
     "color": "purple",
-    "notes": "ponad 40zł"
+    "notes": "ponad 40zł",
+    "subKanban": []
   },
   {
     "id": 1788093304939,
