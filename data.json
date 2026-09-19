@@ -97,7 +97,7 @@
     "deadline": "",
     "priority": 2,
     "status": "freezer",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
