@@ -1006,7 +1006,7 @@
     "priority": 2,
     "color": "purple",
     "status": "todo",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [],
     "subKanban": [
       {
