@@ -975,7 +975,7 @@
     "priority": 2,
     "color": "blue",
     "status": "progress",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
@@ -993,6 +993,21 @@
         "done": false
       }
     ],
+    "subKanban": []
+  },
+  {
+    "id": 1790169952453,
+    "title": "Patrycja Srokosz",
+    "notes": "",
+    "linkUrl": "",
+    "client": "patrycja Srokosz",
+    "contact": "",
+    "deadline": "",
+    "priority": 2,
+    "color": "purple",
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [],
     "subKanban": []
   }
 ]
