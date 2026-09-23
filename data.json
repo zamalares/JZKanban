@@ -703,10 +703,10 @@
     "client": "Martyna Kwaśnik",
     "contact": "",
     "deadline": "2026-12-31",
-    "priority": 2,
+    "priority": 1,
     "color": "teal",
     "status": "progress",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
@@ -739,7 +739,8 @@
         "done": false
       }
     ],
-    "subKanban": []
+    "subKanban": [],
+    "notes": ""
   },
   {
     "id": 1788095394185,
