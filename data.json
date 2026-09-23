@@ -1111,6 +1111,42 @@
           }
         ],
         "subKanban": []
+      },
+      {
+        "id": 1790170239567,
+        "title": "Mów Do Mnie Panie",
+        "notes": "",
+        "linkUrl": "",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "color": "default",
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [
+          {
+            "id": 0,
+            "text": "Tekst",
+            "done": false
+          },
+          {
+            "id": 1,
+            "text": "Nagranie Wokalu",
+            "done": false
+          },
+          {
+            "id": 2,
+            "text": "Edycja",
+            "done": false
+          },
+          {
+            "id": 3,
+            "text": "MIX/Master",
+            "done": false
+          }
+        ],
+        "subKanban": []
       }
     ]
   }
