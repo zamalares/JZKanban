@@ -1239,6 +1239,32 @@
         "collapsed": true,
         "subtasks": [],
         "subKanban": []
+      },
+      {
+        "id": 1790170375264,
+        "title": "W nim trwam / Jemu wierna",
+        "notes": "",
+        "linkUrl": "",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "color": "default",
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [
+          {
+            "id": 0,
+            "text": "Edycja",
+            "done": false
+          },
+          {
+            "id": 1,
+            "text": "MIX/Master",
+            "done": false
+          }
+        ],
+        "subKanban": []
       }
     ]
   }
