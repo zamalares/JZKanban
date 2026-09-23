@@ -1008,6 +1008,38 @@
     "status": "todo",
     "collapsed": false,
     "subtasks": [],
-    "subKanban": []
+    "subKanban": [
+      {
+        "id": 1790170102526,
+        "title": "Oddaje Ci Życie Swe",
+        "notes": "",
+        "linkUrl": "",
+        "client": "",
+        "contact": "",
+        "deadline": "",
+        "priority": 2,
+        "color": "default",
+        "status": "todo",
+        "collapsed": false,
+        "subtasks": [
+          {
+            "id": 0,
+            "text": "Nagranie Wokalu",
+            "done": false
+          },
+          {
+            "id": 1,
+            "text": "Edycja",
+            "done": false
+          },
+          {
+            "id": 2,
+            "text": "MIX/Master",
+            "done": false
+          }
+        ],
+        "subKanban": []
+      }
+    ]
   }
 ]
