@@ -61,9 +61,9 @@
     "client": "Damian Rozenko",
     "contact": "",
     "deadline": "",
-    "priority": 2,
+    "priority": 3,
     "status": "progress",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
@@ -87,7 +87,8 @@
       }
     ],
     "linkUrl": "",
-    "color": "slate"
+    "color": "slate",
+    "notes": "Do rozliczenia sesja"
   },
   {
     "id": 1788093376843,
