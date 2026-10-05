@@ -670,7 +670,7 @@
     "deadline": "",
     "priority": 3,
     "status": "progress",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
