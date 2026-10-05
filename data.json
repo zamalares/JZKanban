@@ -1008,7 +1008,7 @@
     "priority": 1,
     "color": "purple",
     "status": "freezer",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [],
     "subKanban": [
       {
