@@ -668,7 +668,7 @@
     "client": "Aleksandra Urbanek",
     "contact": "",
     "deadline": "",
-    "priority": 2,
+    "priority": 3,
     "status": "progress",
     "collapsed": false,
     "subtasks": [
@@ -695,7 +695,8 @@
     ],
     "subKanban": [],
     "linkUrl": "",
-    "color": "blue"
+    "color": "blue",
+    "notes": ""
   },
   {
     "id": 1788094744600,
