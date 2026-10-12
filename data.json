@@ -13,7 +13,7 @@
         "done": true
       }
     ],
-    "collapsed": false,
+    "collapsed": true,
     "linkUrl": "",
     "contact": "",
     "color": "amber",
@@ -635,7 +635,7 @@
     "deadline": "",
     "priority": 2,
     "status": "done",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
