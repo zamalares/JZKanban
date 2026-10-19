@@ -63,7 +63,7 @@
     "deadline": "",
     "priority": 3,
     "status": "progress",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
@@ -83,7 +83,7 @@
       {
         "id": 3,
         "text": "Mix/Master",
-        "done": false
+        "done": true
       }
     ],
     "linkUrl": "",
