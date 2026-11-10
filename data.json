@@ -63,7 +63,7 @@
     "deadline": "",
     "priority": 3,
     "status": "freezer",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
@@ -936,7 +936,7 @@
     "priority": 2,
     "color": "amber",
     "status": "done",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
