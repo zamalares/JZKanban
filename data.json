@@ -935,7 +935,7 @@
     "deadline": "",
     "priority": 2,
     "color": "amber",
-    "status": "progress",
+    "status": "done",
     "collapsed": false,
     "subtasks": [
       {
