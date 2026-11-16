@@ -1311,7 +1311,7 @@
     "deadline": "2026-12-20",
     "priority": 2,
     "color": "blue",
-    "status": "todo",
+    "status": "progress",
     "collapsed": false,
     "subtasks": [
       {
