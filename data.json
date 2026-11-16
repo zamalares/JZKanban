@@ -1316,21 +1316,26 @@
     "subtasks": [
       {
         "id": 0,
-        "text": "Kompozycja",
+        "text": "Tekst",
         "done": false
       },
       {
         "id": 1,
-        "text": "Nagrania instr",
+        "text": "Kompozycja",
         "done": false
       },
       {
         "id": 2,
-        "text": "Nagranie wok",
+        "text": "Nagrania instr",
         "done": false
       },
       {
         "id": 3,
+        "text": "Nagranie wok",
+        "done": false
+      },
+      {
+        "id": 4,
         "text": "Mix/master",
         "done": false
       }
