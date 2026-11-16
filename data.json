@@ -976,7 +976,7 @@
     "deadline": "",
     "priority": 2,
     "color": "blue",
-    "status": "progress",
+    "status": "freezer",
     "collapsed": false,
     "subtasks": [
       {
