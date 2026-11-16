@@ -977,7 +977,7 @@
     "priority": 2,
     "color": "blue",
     "status": "freezer",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
@@ -1300,5 +1300,41 @@
         "subKanban": []
       }
     ]
+  },
+  {
+    "id": 1794826332383,
+    "title": "Piosenka serial intro",
+    "notes": "",
+    "linkUrl": "",
+    "client": "Kuba Wiśniewski",
+    "contact": "",
+    "deadline": "2026-12-20",
+    "priority": 2,
+    "color": "blue",
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Kompozycja",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Nagrania instr",
+        "done": false
+      },
+      {
+        "id": 2,
+        "text": "Nagranie wok",
+        "done": false
+      },
+      {
+        "id": 3,
+        "text": "Mix/master",
+        "done": false
+      }
+    ],
+    "subKanban": []
   }
 ]
