@@ -1312,7 +1312,7 @@
     "priority": 2,
     "color": "blue",
     "status": "progress",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
