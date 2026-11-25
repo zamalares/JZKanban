@@ -1312,7 +1312,7 @@
     "priority": 2,
     "color": "blue",
     "status": "progress",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
@@ -1389,7 +1389,7 @@
     "priority": 2,
     "color": "purple",
     "status": "todo",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
