@@ -1312,7 +1312,7 @@
     "priority": 2,
     "color": "blue",
     "status": "progress",
-    "collapsed": false,
+    "collapsed": true,
     "subtasks": [
       {
         "id": 0,
@@ -1353,7 +1353,7 @@
     "priority": 2,
     "color": "blue",
     "status": "progress",
-    "collapsed": true,
+    "collapsed": false,
     "subtasks": [
       {
         "id": 0,
@@ -1363,7 +1363,7 @@
       {
         "id": 1,
         "text": "Kompozycja",
-        "done": false
+        "done": true
       },
       {
         "id": 2,
