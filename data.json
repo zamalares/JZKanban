@@ -1377,5 +1377,31 @@
       }
     ],
     "subKanban": []
+  },
+  {
+    "id": 1795622850435,
+    "title": "Bo Gdy Zima w Warszawie",
+    "notes": "",
+    "linkUrl": "",
+    "client": "Natasza Smirnova",
+    "contact": "",
+    "deadline": "2026-12-15",
+    "priority": 2,
+    "color": "purple",
+    "status": "todo",
+    "collapsed": false,
+    "subtasks": [
+      {
+        "id": 0,
+        "text": "Aranżacja",
+        "done": false
+      },
+      {
+        "id": 1,
+        "text": "Nagranie Partii",
+        "done": false
+      }
+    ],
+    "subKanban": []
   }
 ]
